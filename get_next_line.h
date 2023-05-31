@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/02 12:42:01 by palucena          #+#    #+#             */
-/*   Updated: 2023/05/13 20:00:42 by palucena         ###   ########.fr       */
+/*   Created: 2023/05/07 19:00:34 by gkrusta           #+#    #+#             */
+/*   Updated: 2023/05/31 16:49:21 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,23 +14,25 @@
 # define GET_NEXT_LINE_H
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 4
+#  define BUFFER_SIZE 42
 # endif
 
-# include <unistd.h>
 # include <stdlib.h>
+# include <unistd.h>
 # include <fcntl.h>
 
-char	*ft_find_char(int fd, char *str_ac);
-char	*ft_concat_str(char *str_ac, char *tmp);
-char	*ft_get_line(char *str_ac);
-char	*ft_memclear(char *str_ac);
-char	*get_next_line(int fd);
-
-void	*ft_calloc(size_t nb, size_t size);
-size_t	ft_strlen(const char *str);
-char	*ft_strjoin(char const *s1, char const *s2);
+/* utils used */
+void	*ft_calloc(size_t num, size_t size);
 int		ft_strchr(const char *str, int c);
-int		ft_linelen(char *str);
+char	*ft_strjoin(char const *s1, char const *s2);
+size_t	ft_strlen(const char *str);
+int		ft_line_len(char *str);
+
+/* get_next_line file functions */
+char	*get_next_line(int fd);
+char	*ft_find_char(int fd, char *str_ac);
+char	*ft_concat_free(char *str_ac, char *temp);
+char	*ft_get_line(char *str_ac);
+char	*ft_clear_memory(char *str_ac);
 
 #endif

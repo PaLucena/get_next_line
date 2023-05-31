@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/02 12:41:17 by palucena          #+#    #+#             */
-/*   Updated: 2023/05/13 20:15:34 by palucena         ###   ########.fr       */
+/*   Created: 2023/05/07 19:15:07 by gkrusta           #+#    #+#             */
+/*   Updated: 2023/05/31 16:46:35 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,62 +14,63 @@
 
 char	*ft_find_char(int fd, char *str_ac)
 {
-	char	*tmp;
-	int		nb;
+	char	*temp;
+	int		read_return;
 
 	if (!str_ac)
 		str_ac = ft_calloc(1, sizeof(char));
-	tmp = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
-	nb = 1;
-	while (nb > 0)
+	temp = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
+	read_return = 1;
+	while (read_return > 0)
 	{
-		nb = read(fd, tmp, BUFFER_SIZE);
-		if (nb < 0)
+		read_return = read(fd, temp, BUFFER_SIZE);
+		if (read_return < 0)
 		{
-			free(tmp);
+			free(temp);
 			return (NULL);
 		}
-		tmp[nb] = '\0';
-		str_ac = ft_concat_str(str_ac, tmp);
-		if (ft_strchr(str_ac, '\n') == 1)
+		temp[read_return] = '\0';
+		str_ac = ft_concat_free(str_ac, temp);
+		if (ft_strchr(temp, '\n') == 1)
 			break ;
 	}
-	free (tmp);
+	free(temp);
 	return (str_ac);
 }
 
-char	*ft_concat_str(char *str_ac, char *tmp)
+char	*ft_concat_free(char *str_ac, char *temp)
 {
-	char	*combo;
+	char	*joined_str;
 
-	combo = ft_strjoin(str_ac, tmp);
+	joined_str = ft_strjoin(str_ac, temp);
 	free(str_ac);
-	return (combo);
+	return (joined_str);
 }
 
 char	*ft_get_line(char *str_ac)
 {
 	char	*line;
-	int		i;
+	size_t	i;
+	size_t	len;
 
 	i = 0;
 	if (str_ac[i] == '\0')
 		return (NULL);
-	while (str_ac[i] != '\0' && str_ac[i] != '\n')
-		i++;
-	line = ft_calloc((i + 2), sizeof(char));
-	i = 0;
+	len = ft_line_len(str_ac) + 1;
+	if (!len)
+		return (NULL);
+	line = ft_calloc(len, sizeof(char));
 	while (str_ac[i] != '\0' && str_ac[i] != '\n')
 	{
 		line[i] = str_ac[i];
 		i++;
 	}
-	if (str_ac[i] == '\n')
+	if (str_ac[i] != '\0' && str_ac[i] == '\n')
 		line[i++] = '\n';
 	return (line);
 }
 
-char	*ft_memclear(char *str_ac)
+char	*ft_clear_memory(char *str_ac)
 {
 	size_t	i;
 	size_t	j;
@@ -77,7 +78,7 @@ char	*ft_memclear(char *str_ac)
 
 	i = 0;
 	j = 0;
-	while (str_ac[i] && str_ac[i] != '\n')
+	while (str_ac[i] != '\n' && str_ac[i])
 		i++;
 	if (str_ac[i] == '\0')
 	{
@@ -104,7 +105,7 @@ char	*get_next_line(int fd)
 
 	if (BUFFER_SIZE <= 0 || fd < 0)
 		return (NULL);
-	if (read(fd, 0, 0) < 0)
+	if (read(fd, 0, 0) == -1)
 	{
 		if (str_ac != NULL)
 		{
@@ -115,6 +116,6 @@ char	*get_next_line(int fd)
 	}
 	str_ac = ft_find_char(fd, str_ac);
 	line = ft_get_line(str_ac);
-	str_ac = ft_memclear(str_ac);
+	str_ac = ft_clear_memory(str_ac);
 	return (line);
 }

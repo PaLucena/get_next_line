@@ -5,68 +5,32 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/09 19:03:36 by palucena          #+#    #+#             */
-/*   Updated: 2023/05/13 19:58:59 by palucena         ###   ########.fr       */
+/*   Created: 2023/05/07 18:50:59 by gkrusta           #+#    #+#             */
+/*   Updated: 2023/05/13 20:20:47 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-//Asigna memoria y comprueba que esté bien
-void	*ft_calloc(size_t nb, size_t size)
+void	*ft_calloc(size_t num, size_t size)
 {
-	char	*ptr;
-	size_t	i;
+	char			*ptr;
+	unsigned int	i;
 
-	ptr = malloc(size * nb);
-	if (!ptr)
-		return (NULL);
 	i = 0;
-	while (i < (nb * size))
+	ptr = malloc(num * size);
 	{
-		ptr[i] = 0;
-		i++;
+		if (!ptr)
+			return (NULL);
+		while (i < num * size)
+		{
+			ptr[i] = 0;
+			i++;
+		}
 	}
 	return (ptr);
 }
 
-//Comprueba la longitud de strings
-size_t	ft_strlen(const char *str)
-{
-	size_t	i;
-
-	i = 0;
-	while (str[i] != '\0')
-		i++;
-	return (i);
-}
-
-//Une dos strings y devuelve el combo
-char	*ft_strjoin(char const *s1, char const *s2)
-{
-	int		i;
-	int		j;
-	char	*s_total;
-
-	i = ft_strlen(s1);
-	j = ft_strlen(s2);
-	s_total = malloc((i + j + 1) * sizeof(char));
-	if (!s_total)
-		return (NULL);
-	i = -1;
-	while (s1[++i])
-		s_total[i] = s1[i];
-	j = -1;
-	while (s2[++j])
-	{
-		s_total[i] = s2[j];
-		i++;
-	}
-	s_total[i] = 0;
-	return (s_total);
-}
-
-//Busca un carácter dentro de una string
 int	ft_strchr(const char *str, int c)
 {
 	int	i;
@@ -81,8 +45,45 @@ int	ft_strchr(const char *str, int c)
 	return (0);
 }
 
-//Cuenta los carácteres de una línea
-int	ft_linelen(char *str)
+char	*ft_strjoin(char const *s1, char const *s2)
+{
+	char	*str3;
+	int		i;
+	int		j;
+	size_t	len;
+
+	i = 0;
+	j = 0;
+	len = (ft_strlen((char *)s1) + ft_strlen((char *)s2));
+	str3 = malloc(sizeof(char) * (len + 1));
+	if (!str3)
+		return (NULL);
+	while (s1[i])
+	{
+		str3[i] = s1[i];
+		i++;
+	}
+	while (s2[j])
+	{
+		str3[i] = s2[j];
+		i++;
+		j++;
+	}
+	str3[i] = '\0';
+	return (str3);
+}
+
+size_t	ft_strlen(const char *str)
+{
+	size_t	i;
+
+	i = 0;
+	while (str[i] != '\0')
+		i++;
+	return (i);
+}
+
+int	ft_line_len(char *str)
 {
 	int	i;
 

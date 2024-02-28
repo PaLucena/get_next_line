@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 16:57:30 by palucena          #+#    #+#             */
-/*   Updated: 2024/02/28 19:24:22 by palucena         ###   ########.fr       */
+/*   Updated: 2024/02/28 20:35:54 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 static char	*read_stuff(char *total, char *buf, int fd)
 {
@@ -52,7 +52,7 @@ static char	*ft_clean(char *line)
 
 char	*get_next_line(int fd)
 {
-	static char	*rest;
+	static char	*rest[1024];
 	char		*line;
 	char		*buf;
 
@@ -60,18 +60,18 @@ char	*get_next_line(int fd)
 		return (NULL);
 	if (read(fd, NULL, 0) == -1)
 	{
-		if (rest)
-			free(rest);
+		if (rest[fd])
+			free(rest[fd]);
 		return (NULL);
 	}
 	buf = malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	if (!buf)
 		return (free(buf), NULL);
-	line = read_stuff(rest, buf, fd);
+	line = read_stuff(rest[fd], buf, fd);
 	free(buf);
 	if (!line)
 		return (NULL);
-	rest = ft_clean(line);
+	rest[fd] = ft_clean(line);
 	if (line[0] == '\0')
 		return (free(line), NULL);
 	return (line);
